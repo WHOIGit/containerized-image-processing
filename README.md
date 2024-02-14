@@ -8,7 +8,7 @@ Example:
 
 ```
 docker build -t image-processing .
-docker run -v ./input:/input -v ./output:/output image-processing
+docker run --rm -v ./input:/input -v ./output:/output image-processing
 ```
 
 Operations and errors are logged to stdout.
