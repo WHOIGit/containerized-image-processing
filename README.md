@@ -11,4 +11,4 @@ docker build -t image-processing .
 docker run --rm -v ./input:/input -v ./output:/output image-processing
 ```
 
-Operations and errors are logged to stdout.
+Operations and errors are logged to to `/logs` in the container, so can be exposed by adding `-v /my/log/dir:/logs` to the `docker run` command.

@@ -1,7 +1,7 @@
 import os
+import re
 
-import logging
-logging.basicConfig(level=logging.INFO)
+from provenance.capture import Step, Logger
 
 from floyd_steinberg import floyd_steinberg_dithering
 
@@ -11,14 +11,26 @@ OUTPUT_DIRECTORY = '/output'
 # Get a list of all the files in the input directory
 input_files = os.listdir(INPUT_DIRECTORY)
 
-# Process each file
-for input_file in input_files:
-    # save output file as a png if it's a jpg
-    output_file = input_file.replace('.jpg', '.png')
-    input_path = os.path.join(INPUT_DIRECTORY, input_file)
-    output_path = os.path.join(OUTPUT_DIRECTORY, output_file)
-    try:
-        floyd_steinberg_dithering(input_path, output_path, resize=True)
-        logging.info(f'Processed {input_file}')
-    except Exception as e:
-        logging.error(f'Error processing {input_file}: {e}')
+RESIZE = True
+
+logger = Logger.file('/logs/output.log')
+
+with Step(description='Apply dithering dithering to images', logger=logger) as job:
+    job.add_parameter(name='dithering_algorithm', value='Floyd-Steinberg')
+    job.add_parameter(name='color_space', value='grayscale')
+    job.add_parameter(name='resize', value=RESIZE)
+    # Process each file
+    for input_file in input_files:
+        # save output file as a png
+        output_file = re.sub(r'\.\w+$', '.png', input_file)
+        input_path = os.path.join(INPUT_DIRECTORY, input_file)
+        output_path = os.path.join(OUTPUT_DIRECTORY, output_file)
+        try:
+            with Step(parent=job) as step:
+                step.add_input(name=input_file)
+                step.add_output(name=output_file)
+                step.add_parameter(name='resize', value=RESIZE)
+                floyd_steinberg_dithering(input_path, output_path, resize=RESIZE)
+        except:
+            # error is already logged by the Step, proceed to the next file
+            continue
