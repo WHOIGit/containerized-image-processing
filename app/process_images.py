@@ -15,7 +15,7 @@ RESIZE = True
 
 logger = Logger.file('/logs/output.log')
 
-with Step(description='Apply dithering dithering to images', logger=logger) as job:
+with Step(description='Apply dithering to images', logger=logger) as job:
     job.add_parameter(name='dithering_algorithm', value='Floyd-Steinberg')
     job.add_parameter(name='color_space', value='grayscale')
     job.add_parameter(name='resize', value=RESIZE)
