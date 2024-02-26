@@ -1,14 +1,15 @@
 # Containerized image processing
 
-A simple container for performing an image processing operation on a set of input files and depositing them in an output directory.
+A simple container providing a REST API for image -> image processing algorithms.
 
-To use, map your input and output directories to `/input` and `/output` container paths.
+After building and tagging the image (e.g., as `imageprocessing`), run it and map your desired port to 8000:
 
 Example:
 
 ```
-docker build -t image-processing .
-docker run --rm -v ./input:/input -v ./output:/output image-processing
+docker run --rm -p 8000:8000 imageprocessing
 ```
 
-Operations and errors are logged to to `/logs` in the container, so can be exposed by adding `-v /my/log/dir:/logs` to the `docker run` command.
+Then issue a POST request to the `/dither/` endpoint containing an image, and you will receive a dithered image in .png format. Other algorithms are left as an exercise to the reader.
+
+Note that the dithering algorithm is slow and is designed for small grayscale images.
