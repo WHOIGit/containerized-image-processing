@@ -2,20 +2,9 @@ import os
 from PIL import Image
 import numpy as np
 
-def floyd_steinberg_dithering(image_path, output_path=None, resize=False, resize_dim=256):
-    # Load image and convert to grayscale
-    img = Image.open(image_path).convert('L')
-    
-    if resize:
-        # resize so that the longest side is resize_dim or less
-        width, height = img.size
-        max_dim = max(width, height)
-        if max_dim > resize_dim:
-            ratio = resize_dim / max_dim
-            new_width = int(width * ratio)
-            new_height = int(height * ratio)
-            img = img.resize((new_width, new_height))
-
+def floyd_steinberg_dithering(input_image):
+    # convert to grayscale
+    img = input_image.convert('L')
     pixels = np.array(img, dtype=np.float32)
 
     # Get dimensions
@@ -39,11 +28,4 @@ def floyd_steinberg_dithering(image_path, output_path=None, resize=False, resize
 
     # Convert back to uint8 and create an image
     result_img = Image.fromarray(np.clip(pixels, 0, 255).astype('uint8'))
-    
-    # Save or return
-    if output_path:
-        result_img.save(output_path)
-        return output_path
-    else:
-        result_img.save('dithered_image.png')
-    return os.path.basename(output_path)
+    return result_img
