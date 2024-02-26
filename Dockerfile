@@ -21,4 +21,7 @@ RUN apt-get update && \
 
 COPY ./app .
 
-CMD [ "python", "process_images.py" ]
+EXPOSE 8000
+
+# Run api.py when the container launches
+CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"]
