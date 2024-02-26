@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: imageproc-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: imageproc
+  template:
+    metadata:
+      labels:
+        app: imageproc
+    spec:
+      containers:
+      - name: imageproc-container
+        image: floydsteinberg:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
