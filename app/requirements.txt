@@ -3,4 +3,3 @@ numpy
 fastapi
 uvicorn
 python-multipart
-git+https://github.com/WHOIGit/provenance-capture.git
