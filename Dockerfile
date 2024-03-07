@@ -8,14 +8,7 @@ WORKDIR /app
 
 COPY ./app/requirements.txt .
 
-# Install git, install dependencies from requirements.txt, then remove git to save space
-RUN apt-get update && \
-    apt-get install -y git && \
-    pip install -r requirements.txt && \
-    apt-get remove -y git && \
-    apt-get autoremove -y && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN pip install -r requirements.txt
 
 # Copy rest of app
 
